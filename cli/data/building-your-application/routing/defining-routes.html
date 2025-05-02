@@ -1,0 +1,67 @@
+<h1>Defining Routes</h1>
+<p>
+  In Next.js, you define routes using the file-system based router. This means
+  that the folder structure in your app directory directly maps to the routes in
+  your application.
+</p>
+
+<h2>Creating Routes</h2>
+<p>
+  To create a new route, you can create a new folder in the
+  <code>app</code> directory. For example, to create a route for
+  <code>/blog</code>, you would create a folder called <code>blog</code> in the
+  <code>app</code> directory.
+</p>
+
+<pre><code>
+app/
+├── blog/
+│   └── page.tsx
+└── page.tsx
+</code></pre>
+
+<p>
+  In this example, <code>app/page.tsx</code> corresponds to the
+  <code>/</code> route, and <code>app/blog/page.tsx</code> corresponds to the
+  <code>/blog</code> route.
+</p>
+
+<h2>Special Files</h2>
+<p>
+  Next.js provides several special files that are used to create UI for a
+  specific route segment:
+</p>
+<ul>
+  <li>
+    <code>page.tsx</code>: Creates a UI that is unique to a route and makes the
+    path publicly accessible.
+  </li>
+  <li>
+    <code>layout.tsx</code>: Creates shared UI for a segment and its children.
+  </li>
+  <li>
+    <code>loading.tsx</code>: Creates loading UI for a segment and its children.
+  </li>
+  <li>
+    <code>error.tsx</code>: Creates error UI for a segment and its children.
+  </li>
+  <li><code>not-found.tsx</code>: Creates UI for when a route is not found.</li>
+</ul>
+
+<h2>Example</h2>
+<pre><code class="language-tsx">
+// app/blog/page.tsx
+export default function BlogPage() {
+  return &lt;h1&gt;Blog&lt;/h1&gt;;
+}
+
+// app/blog/[slug]/page.tsx
+export default function BlogPost({ params }: { params: { slug: string } }) {
+  return &lt;h1&gt;Blog Post: {params.slug}&lt;/h1&gt;;
+}
+</code></pre>
+
+<p>
+  In this example, we've created a blog page at <code>/blog</code> and a dynamic
+  route for blog posts at <code>/blog/[slug]</code>.
+</p>

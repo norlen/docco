@@ -1,0 +1,24 @@
+services:
+  meilisearch:
+    image: "getmeili/meilisearch:v1.14"
+    environment:
+      MEILI_MASTER_KEY: "${MEILISEARCH_MASTER_KEY}"
+      MEILI_NO_ANALYTICS: "true"
+    ports:
+      - "${FORWARD_MEILISEARCH_PORT:-7700}:7700"
+    volumes:
+      - "meili_data:/meili_data"
+    # networks:
+    #   - docco
+    healthcheck:
+      test: set -o pipefail;curl -fsS http://localhost:7700/health | grep -q '{"status":"available"}'
+      retries: 3
+      timeout: 5s
+
+# networks:
+#   docco:
+#     driver: bridge
+
+volumes:
+  meili_data:
+    driver: local

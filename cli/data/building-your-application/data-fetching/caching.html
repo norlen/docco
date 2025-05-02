@@ -1,0 +1,63 @@
+<h1>Data Fetching: Caching</h1>
+<p>
+  Next.js has built-in data caching mechanisms to help improve performance and
+  reduce the number of requests to your data sources.
+</p>
+
+<h2>Automatic Caching with fetch</h2>
+<p>
+  By default, <code>fetch</code> requests are automatically cached in Next.js.
+  This means that if you make the same request multiple times, the data will
+  only be fetched once.
+</p>
+
+<pre><code class="language-tsx">
+async function getData() {
+  const res = await fetch("https://api.example.com/data");
+  // The result is cached
+  return res.json();
+}
+
+export default async function Page() {
+  const data = await getData();
+  return &lt;div&gt;{data.message}&lt;/div&gt;;
+}
+</code></pre>
+
+<h2>Revalidation Strategies</h2>
+<p>
+  You can control how data is cached using the <code>revalidate</code> option:
+</p>
+
+<h3>Time-based Revalidation</h3>
+<pre><code class="language-tsx">
+fetch("https://api.example.com/data", { next: { revalidate: 60 } });
+</code></pre>
+<p>This will cache the data for 60 seconds.</p>
+
+<h3>On-demand Revalidation</h3>
+<p>
+  You can also revalidate data on-demand using the
+  <code>revalidatePath</code> and <code>revalidateTag</code> functions.
+</p>
+
+<pre><code class="language-tsx">
+import { revalidatePath } from "next/cache";
+
+export async function POST(request: Request) {
+  const path = request.nextUrl.searchParams.get("path") || "/";
+  revalidatePath(path);
+  return Response.json({ revalidated: true, now: Date.now() });
+}
+</code></pre>
+
+<h2>Opting out of Data Caching</h2>
+<p>
+  You can opt out of caching by setting <code>revalidate</code> to
+  <code>0</code> or using the <code>cache: 'no-store'</code> option:
+</p>
+
+<pre><code class="language-tsx">
+fetch("https://api.example.com/data", { cache: "no-store" });
+</code></pre>
+<p>This will fetch fresh data on every request.</p>

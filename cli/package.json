@@ -1,0 +1,19 @@
+{
+  "name": "docco",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "bin": {
+    "docco": "./index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "commander": "^13.1.0",
+    "superjson": "^2.2.2"
+  }
+}

@@ -1,0 +1,113 @@
+<h1>Data Fetching</h1>
+
+<p>
+  This guide will walk you through the basics of data fetching and caching in
+  Next.js, providing practical examples and best practices.
+</p>
+
+<p>Here's a minimal example of data fetching in Next.js:</p>
+
+<pre><code class="language-tsx">
+export default async function Page() {
+  const data = await fetch("https://api.vercel.app/blog");
+  const posts = await data.json();
+  return (
+    &lt;ul&gt;
+      {posts.map((post) =&gt; (
+        &lt;li key={post.id}&gt;{post.title}&lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}
+</code></pre>
+
+<p>
+  This example demonstrates a basic server-side data fetch using the
+  <code>fetch</code> API in an asynchronous React Server Component.
+</p>
+
+<h2>Examples</h2>
+
+<h3>Fetching data on the server with the <code>fetch</code> API</h3>
+
+<p>
+  This component will fetch and display a list of blog posts. The response from
+  <code>fetch</code> is not cached by default.
+</p>
+
+<pre><code class="language-tsx">
+export default async function Page() {
+  const data = await fetch("https://api.vercel.app/blog");
+  const posts = await data.json();
+  return (
+    &lt;ul&gt;
+      {posts.map((post) =&gt; (
+        &lt;li key={post.id}&gt;{post.title}&lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}
+</code></pre>
+
+<h3>Fetching data on the server with an ORM or database</h3>
+
+<p>
+  This component will fetch and display a list of blog posts. The response from
+  the database is not cached by default but could be with additional
+  configuration.
+</p>
+
+<pre><code class="language-tsx">
+import &#123; db, posts &#125; from "@/lib/db";
+
+export default async function Page() {
+  const allPosts = await db.select().from(posts);
+  return (
+    &lt;ul&gt;
+      {allPosts.map((post) =&gt; (
+        &lt;li key={post.id}&gt;{post.title}&lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}
+</code></pre>
+
+<h3>Fetching data on the client</h3>
+
+<p>We recommend first attempting to fetch data on the server-side.</p>
+
+<p>
+  However, there are still cases where client-side data fetching makes sense. In
+  these scenarios, you can manually call <code>fetch</code> in a
+  <code>useEffect</code> (not recommended), or lean on popular React libraries
+  in the community (such as SWR or React Query) for client fetching.
+</p>
+
+<pre><code class="language-tsx">
+"use client";
+
+import &#123; useState, useEffect &#125; from "react";
+
+export function Posts() {
+  const [posts, setPosts] = useState(null);
+
+  useEffect(() =&gt; {
+    async function fetchPosts() {
+      const res = await fetch("https://api.vercel.app/blog");
+      const data = await res.json();
+      setPosts(data);
+    }
+    fetchPosts();
+  }, []);
+
+  if (!posts) return &lt;div&gt;Loading...&lt;/div&gt;;
+
+  return (
+    &lt;ul&gt;
+      {posts.map((post) =&gt; (
+        &lt;li key={post.id}&gt;{post.title}&lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}
+</code></pre>
